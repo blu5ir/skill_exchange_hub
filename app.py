@@ -536,8 +536,7 @@ def internal_error(error):
     return "<h1>500 - Internal Server Error</h1><p>Something went wrong on our end. Please try again later.</p>", 500
 
 if __name__ == '__main__':
+    # Only run in development
     print("Starting Campus Skill Exchange Hub...")
-    print("Enhanced Database Schema Ready!")
     print("Visit: http://localhost:5000")
-    print("Features: Skill Requests, Mentorship, Private Chat, Reviews")
     app.run(debug=True, host='0.0.0.0', port=5000)
