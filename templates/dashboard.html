@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-light border-0">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h2 class="fw-bold mb-2">Welcome back, {{ current_user.first_name }}! 👋</h2>
+                            <p class="mb-1 fs-5">
+                                <i class="fas fa-graduation-cap me-2"></i>
+                                {{ current_user.major }}, Year {{ current_user.year }}
+                            </p>
+                            {% if current_user.skills %}
+                            <p class="mb-0 text-muted">
+                                <i class="fas fa-tools me-2"></i>
+                                <strong>I can teach:</strong> {{ current_user.skills }}
+                            </p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="user-avatar d-inline-flex mx-auto" style="width: 80px; height: 80px; font-size: 2rem;">
+                                {{ current_user.first_name[0] }}{{ current_user.last_name[0] }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <div class="card text-white bg-primary border-0">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-lightbulb fa-3x mb-3"></i>
+                    <h5>Want to Learn Something?</h5>
+                    <p class="mb-3">Post what you want to learn and get help from peers</p>
+                    <a href="/create_request" class="btn btn-light btn-lg">
+                        <i class="fas fa-plus-circle me-2"></i>Create Learning Request
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card text-white bg-success border-0">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-hands-helping fa-3x mb-3"></i>
+                    <h5>Ready to Teach?</h5>
+                    <p class="mb-3">Help others learn by offering your expertise</p>
+                    <a href="#help-others" class="btn btn-light btn-lg">
+                        <i class="fas fa-search me-2"></i>Browse Requests
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Connections -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow">
+                <div class="card-header bg-warning text-dark py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-sync-alt me-2"></i>My Active Connections
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if my_connections %}
+                        <div class="row">
+                            {% for connection in my_connections %}
+                            <div class="col-lg-6 mb-3">
+                                <div class="card h-100 border">
+                                    <div class="card-body">
+                                        <h6 class="card-title fw-bold">{{ connection.skill_request.title }}</h6>
+                                        
+                                        {% if current_user.id == connection.learner_id %}
+                                            <p class="mb-2">
+                                                <i class="fas fa-user-graduate me-2"></i>
+                                                <strong>Learning from:</strong> 
+                                                {{ connection.mentor.first_name }} {{ connection.mentor.last_name }}
+                                            </p>
+                                        {% else %}
+                                            <p class="mb-2">
+                                                <i class="fas fa-chalkboard-teacher me-2"></i>
+                                                <strong>Teaching:</strong> 
+                                                {{ connection.learner.first_name }} {{ connection.learner.last_name }}
+                                            </p>
+                                        {% endif %}
+                                        
+                                        <p class="mb-3">
+                                            <span class="badge status-badge 
+                                                {% if connection.status == 'pending' %}bg-warning
+                                                {% elif connection.status == 'accepted' %}bg-success
+                                                {% elif connection.status == 'rejected' %}bg-danger
+                                                {% elif connection.status == 'completed' %}bg-info
+                                                {% else %}bg-secondary{% endif %}">
+                                                {{ connection.status | title }}
+                                            </span>
+                                        </p>
+                                        
+                                        <div class="btn-group w-100">
+                                            {% if connection.status == 'pending' and current_user.id == connection.learner_id %}
+                                                <form method="POST" action="/manage_connection/{{ connection.id }}" class="d-inline w-50">
+                                                    <input type="hidden" name="action" value="accept">
+                                                    <button type="submit" class="btn btn-success btn-sm w-100">
+                                                        <i class="fas fa-check me-1"></i>Accept
+                                                    </button>
+                                                </form>
+                                                <form method="POST" action="/manage_connection/{{ connection.id }}" class="d-inline w-50">
+                                                    <input type="hidden" name="action" value="reject">
+                                                    <button type="submit" class="btn btn-danger btn-sm w-100">
+                                                        <i class="fas fa-times me-1"></i>Reject
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+                                            
+                                            {% if connection.status == 'accepted' %}
+                                                <a href="/chat/{{ connection.id }}" class="btn btn-primary btn-sm w-50">
+                                                    <i class="fas fa-comments me-1"></i>Chat
+                                                </a>
+                                                <form method="POST" action="/manage_connection/{{ connection.id }}" class="d-inline w-50">
+                                                    <input type="hidden" name="action" value="complete">
+                                                    <button type="submit" class="btn btn-success btn-sm w-100">
+                                                        <i class="fas fa-flag me-1"></i>Complete
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No active connections yet. Create a learning request to get started!</p>
+                            <a href="/create_request" class="btn btn-primary">
+                                <i class="fas fa-plus-circle me-2"></i>Create Your First Request
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Two Column Layout -->
+    <div class="row">
+        <!-- My Requests -->
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow h-100">
+                <div class="card-header bg-info text-white py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list-alt me-2"></i>My Learning Requests
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if my_requests %}
+                        {% for request in my_requests %}
+                        <div class="card mb-3 border">
+                            <div class="card-body">
+                                <h6 class="fw-bold">{{ request.title }}</h6>
+                                <p class="text-muted mb-2">
+                                    <i class="fas fa-tag me-1"></i>{{ request.skill_category }}
+                                </p>
+                                <p class="small text-muted mb-2">{{ request.description[:100] }}...</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge 
+                                        {% if request.status == 'open' %}bg-success
+                                        {% elif request.status == 'accepted' %}bg-warning
+                                        {% elif request.status == 'completed' %}bg-info
+                                        {% else %}bg-secondary{% endif %}">
+                                        {{ request.status | title }}
+                                    </span>
+                                    <small class="text-muted">
+                                        {{ request.created_at | string | truncate(10, true, '') }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-clipboard-list fa-2x text-muted mb-3"></i>
+                            <p class="text-muted">No learning requests yet.</p>
+                            <a href="/create_request" class="btn btn-info btn-sm">
+                                <i class="fas fa-plus me-1"></i>Create One
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Available Requests from Others -->
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow h-100" id="help-others">
+                <div class="card-header bg-success text-white py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-hands-helping me-2"></i>Help Others Learn
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if available_requests %}
+                        {% for request in available_requests %}
+                        <div class="card mb-3 border">
+                            <div class="card-body">
+                                <h6 class="fw-bold">{{ request.title }}</h6>
+                                <p class="text-muted mb-2">
+                                    <i class="fas fa-tag me-1"></i>{{ request.skill_category }}
+                                </p>
+                                <p class="small text-muted mb-2">{{ request.description[:100] }}...</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        <i class="fas fa-user me-1"></i>
+                                        {{ request.user.first_name }} {{ request.user.last_name }}
+                                    </small>
+                                    <form method="POST" action="/help_request/{{ request.id }}">
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            <i class="fas fa-handshake me-1"></i>Offer Help
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-search fa-2x text-muted mb-3"></i>
+                            <p class="text-muted">No open learning requests available at the moment.</p>
+                            <p class="text-muted small">Check back later to help your peers!</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

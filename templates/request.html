@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+        <div class="card shadow border-0">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <div class="user-avatar mx-auto mb-3">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <h2 class="fw-bold">Create Learning Request</h2>
+                    <p class="text-muted">What do you want to learn? Others can offer to help you.</p>
+                </div>
+                
+                <form method="POST">
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-heading me-2"></i>What do you want to learn? *
+                        </label>
+                        <input type="text" class="form-control form-control-lg" name="title" 
+                               placeholder="e.g., Python Programming Basics, Guitar Lessons, Web Design Fundamentals" 
+                               required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-tags me-2"></i>Skill Category *
+                        </label>
+                        <select class="form-select form-select-lg" name="skill_category" required>
+                            <option value="">Select a category</option>
+                            <option value="Programming">Programming & Tech</option>
+                            <option value="Design">Design & Creative</option>
+                            <option value="Languages">Languages</option>
+                            <option value="Music">Music & Arts</option>
+                            <option value="Sports">Sports & Fitness</option>
+                            <option value="Academics">Academic Subjects</option>
+                            <option value="Business">Business & Career</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-align-left me-2"></i>Description *
+                        </label>
+                        <textarea class="form-control" name="description" rows="6" 
+                                  placeholder="Describe what you want to learn, your current level, and what you hope to achieve...
+
+Example: I'm a complete beginner looking to learn basic Python programming. I want to understand variables, loops, functions, and basic data structures to build simple applications. I'm available to meet on weekends for 1-2 hours and prefer hands-on learning with practical examples.
+
+Please include:
+• Your current skill level
+• What you hope to achieve
+• Your availability
+• Any specific learning preferences" required></textarea>
+                    </div>
+                    
+                    <div class="alert alert-info border-0">
+                        <div class="d-flex">
+                            <i class="fas fa-lightbulb me-3 fs-4 text-warning"></i>
+                            <div>
+                                <strong>Tip:</strong> Be specific about what you want to learn and your availability. 
+                                This helps others understand how they can best help you and increases your chances 
+                                of finding the right learning partner.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg py-3">
+                            <i class="fas fa-paper-plane me-2"></i>Create Learning Request
+                        </button>
+                        <a href="/dashboard" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

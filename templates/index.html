@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-4">Welcome to Campus Skill Exchange Hub</h1>
+        <p class="lead fs-4 mb-3">Learn from Peers, Share Your Skills, Grow Together</p>
+        <p class="fs-5 mb-4">Connect with fellow students to exchange knowledge and skills in a collaborative learning environment</p>
+        <div class="mt-4">
+            {% if not current_user.is_authenticated %}
+                <a href="/register" class="btn btn-light btn-lg me-3">
+                    <i class="fas fa-rocket me-2"></i>Get Started
+                </a>
+                <a href="/login" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </a>
+            {% else %}
+                <a href="/dashboard" class="btn btn-light btn-lg me-3">
+                    <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                </a>
+                <a href="/create_request" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-plus-circle me-2"></i>Create Request
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row text-center mb-5">
+        <div class="col-12">
+            <h2 class="fw-bold mb-3">How It Works</h2>
+            <p class="lead text-muted">Three simple steps to start your skill exchange journey</p>
+        </div>
+    </div>
+    
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <div class="card skill-card border-0 shadow h-100">
+                <div class="card-body p-4">
+                    <div class="user-avatar mx-auto mb-3">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h4 class="fw-bold">📚 Learn Skills</h4>
+                    <p class="text-muted">Post what you want to learn and get help from skilled peers in our community</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card skill-card border-0 shadow h-100">
+                <div class="card-body p-4">
+                    <div class="user-avatar mx-auto mb-3">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h4 class="fw-bold">🎯 Teach Others</h4>
+                    <p class="text-muted">Share your expertise and help fellow students learn new skills</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card skill-card border-0 shadow h-100">
+                <div class="card-body p-4">
+                    <div class="user-avatar mx-auto mb-3">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h4 class="fw-bold">💬 Connect & Chat</h4>
+                    <p class="text-muted">Build one-on-one connections with private messaging for seamless learning</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <h3 class="fw-bold mb-4">Popular Skill Categories</h3>
+            <div class="row justify-content-center">
+                <div class="col-auto">
+                    <span class="badge bg-primary fs-6 m-1 p-2">Programming</span>
+                    <span class="badge bg-success fs-6 m-1 p-2">Design</span>
+                    <span class="badge bg-info fs-6 m-1 p-2">Languages</span>
+                    <span class="badge bg-warning fs-6 m-1 p-2">Music</span>
+                    <span class="badge bg-danger fs-6 m-1 p-2">Sports</span>
+                    <span class="badge bg-secondary fs-6 m-1 p-2">Academics</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

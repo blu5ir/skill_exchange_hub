@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+        <div class="card shadow border-0">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <div class="user-avatar mx-auto mb-3">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h2 class="fw-bold">Skill Offer</h2>
+                    <p class="text-muted">Share what you can teach with others</p>
+                </div>
+                
+                <form method="POST">
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-heading me-2"></i>What skill can you teach? *
+                        </label>
+                        <input type="text" class="form-control form-control-lg" name="title" 
+                               placeholder="e.g., Python Programming, Guitar Lessons, Web Design, Spanish Conversation" 
+                               required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-tags me-2"></i>Skill Category *
+                        </label>
+                        <select class="form-select form-select-lg" name="skill_category" required>
+                            <option value="">Select a category</option>
+                            <option value="Programming">Programming & Tech</option>
+                            <option value="Design">Design & Creative</option>
+                            <option value="Languages">Languages</option>
+                            <option value="Music">Music & Arts</option>
+                            <option value="Sports">Sports & Fitness</option>
+                            <option value="Academics">Academic Subjects</option>
+                            <option value="Business">Business & Career</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-align-left me-2"></i>Description *
+                        </label>
+                        <textarea class="form-control" name="description" rows="6" 
+                                  placeholder="Describe what you can teach, your expertise level, and how you can help others...
+
+Example: I'm an advanced Python developer with 3 years of experience. I can help with:
+• Basic Python syntax and concepts
+• Object-oriented programming
+• Web development with Flask/Django
+• Data analysis with pandas
+• Building simple projects
+
+I'm available for 1-2 hour sessions on weekends and can provide hands-on coding practice and project guidance.
+
+Please include:
+• Your expertise level
+• Specific topics you can teach
+• Your availability
+• Teaching style or approach" required></textarea>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-clock me-2"></i>Availability
+                        </label>
+                        <input type="text" class="form-control" name="availability" 
+                               placeholder="e.g., Weekends 2-5 PM, Monday/Wednesday evenings">
+                        <div class="form-text">
+                            When are you typically available for teaching sessions?
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-chalkboard me-2"></i>Teaching Style
+                        </label>
+                        <select class="form-select" name="teaching_style">
+                            <option value="">Select preferred style</option>
+                            <option value="hands-on">Hands-on Practice</option>
+                            <option value="theoretical">Theory & Concepts</option>
+                            <option value="project-based">Project-based Learning</option>
+                            <option value="mixed">Mixed Approach</option>
+                        </select>
+                    </div>
+                    
+                    <div class="alert alert-info border-0">
+                        <div class="d-flex">
+                            <i class="fas fa-lightbulb me-3 fs-4 text-warning"></i>
+                            <div>
+                                <strong>Tip:</strong> Be clear about what you can teach and how you can help. 
+                                This helps learners understand if your teaching style matches their learning needs.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg py-3">
+                            <i class="fas fa-bullhorn me-2"></i>Publish Skill Offer
+                        </button>
+                        <a href="/dashboard" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

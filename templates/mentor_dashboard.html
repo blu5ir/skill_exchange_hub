@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Mentor Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-success text-white border-0">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h2 class="fw-bold mb-2">Mentor Dashboard 🎯</h2>
+                            <p class="mb-1 fs-5">Welcome back, {{ current_user.first_name }}! Share your knowledge.</p>
+                            <p class="mb-0">Help others learn and grow through your expertise</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="user-avatar d-inline-flex mx-auto" style="width: 80px; height: 80px; font-size: 2rem; background: linear-gradient(45deg, #28a745, #20c997);">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card text-white bg-info border-0 h-100">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-plus-circle fa-2x mb-3"></i>
+                    <h5>Offer Skills</h5>
+                    <p class="mb-3">Create new skill offers</p>
+                    <a href="/create_offer" class="btn btn-light btn-sm">Create Offer</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-white bg-warning border-0 h-100">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-search fa-2x mb-3"></i>
+                    <h5>Find Learners</h5>
+                    <p class="mb-3">Browse learning requests</p>
+                    <a href="#learning-requests" class="btn btn-light btn-sm">Browse Requests</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-white bg-primary border-0 h-100">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-comments fa-2x mb-3"></i>
+                    <h5>Teaching Chats</h5>
+                    <p class="mb-3">Continue teaching sessions</p>
+                    <a href="#active-sessions" class="btn btn-light btn-sm">View Sessions</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Teaching Sessions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow">
+                <div class="card-header bg-success text-white py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chalkboard me-2"></i>My Active Teaching Sessions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if teaching_sessions %}
+                        <div class="row">
+                            {% for session in teaching_sessions %}
+                            <div class="col-lg-6 mb-3">
+                                <div class="card h-100 border">
+                                    <div class="card-body">
+                                        <h6 class="card-title fw-bold">{{ session.skill_offer.title }}</h6>
+                                        <p class="mb-2">
+                                            <i class="fas fa-user-graduate me-2"></i>
+                                            <strong>Teaching:</strong> 
+                                            {{ session.learner.first_name }} {{ session.learner.last_name }}
+                                        </p>
+                                        <p class="mb-2 text-muted small">
+                                            <i class="fas fa-tag me-2"></i>{{ session.skill_offer.skill_category }}
+                                        </p>
+                                        <p class="mb-3">
+                                            <span class="badge 
+                                                {% if session.status == 'pending' %}bg-warning
+                                                {% elif session.status == 'accepted' %}bg-success
+                                                {% elif session.status == 'completed' %}bg-info
+                                                {% else %}bg-secondary{% endif %}">
+                                                {{ session.status | title }}
+                                            </span>
+                                        </p>
+                                        
+                                        <div class="btn-group w-100">
+                                            {% if session.status == 'pending' %}
+                                                <form method="POST" action="/accept_teaching_request/{{ session.id }}" class="d-inline w-50">
+                                                    <button type="submit" class="btn btn-success btn-sm w-100">
+                                                        <i class="fas fa-check me-1"></i>Accept
+                                                    </button>
+                                                </form>
+                                                <form method="POST" action="/reject_teaching_request/{{ session.id }}" class="d-inline w-50">
+                                                    <button type="submit" class="btn btn-danger btn-sm w-100">
+                                                        <i class="fas fa-times me-1"></i>Reject
+                                                    </button>
+                                                </form>
+                                            {% elif session.status == 'accepted' %}
+                                                <a href="/chat/{{ session.id }}" class="btn btn-primary btn-sm w-50">
+                                                    <i class="fas fa-comments me-1"></i>Chat
+                                                </a>
+                                                <form method="POST" action="/complete_teaching/{{ session.id }}" class="d-inline w-50">
+                                                    <button type="submit" class="btn btn-info btn-sm w-100">
+                                                        <i class="fas fa-flag me-1"></i>Complete
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-chalkboard-teacher fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No active teaching sessions yet.</p>
+                            <a href="/create_offer" class="btn btn-success me-2">
+                                <i class="fas fa-plus-circle me-2"></i>Create Skill Offer
+                            </a>
+                            <a href="#learning-requests" class="btn btn-info">
+                                <i class="fas fa-search me-2"></i>Find Learners
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Two Column Layout -->
+    <div class="row">
+        <!-- My Skill Offers -->
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow h-100">
+                <div class="card-header bg-info text-white py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-bullhorn me-2"></i>My Skill Offers
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if my_offers %}
+                        {% for offer in my_offers %}
+                        <div class="card mb-3 border">
+                            <div class="card-body">
+                                <h6 class="fw-bold text-info">{{ offer.title }}</h6>
+                                <p class="text-muted mb-2">
+                                    <i class="fas fa-tag me-1"></i>{{ offer.skill_category }}
+                                </p>
+                                <p class="small text-muted mb-2">{{ offer.description[:100] }}...</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge 
+                                        {% if offer.status == 'active' %}bg-success
+                                        {% elif offer.status == 'paused' %}bg-warning
+                                        {% else %}bg-secondary{% endif %}">
+                                        {{ offer.status | title }}
+                                    </span>
+                                    <div>
+                                        <small class="text-muted me-2">
+                                            <i class="fas fa-users me-1"></i>{{ offer.learner_count }}
+                                        </small>
+                                        <form method="POST" action="/toggle_offer/{{ offer.id }}" class="d-inline">
+                                            <button type="submit" class="btn btn-sm 
+                                                {% if offer.status == 'active' %}btn-warning
+                                                {% else %}btn-success{% endif %}">
+                                                {% if offer.status == 'active' %}Pause{% else %}Activate{% endif %}
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-bullhorn fa-2x text-muted mb-3"></i>
+                            <p class="text-muted">No skill offers yet.</p>
+                            <a href="/create_offer" class="btn btn-info btn-sm">
+                                <i class="fas fa-plus me-1"></i>Create Offer
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Learning Requests from Others -->
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow h-100" id="learning-requests">
+                <div class="card-header bg-warning text-dark py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-hands-helping me-2"></i>Learning Requests
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if learning_requests %}
+                        {% for request in learning_requests %}
+                        <div class="card mb-3 border">
+                            <div class="card-body">
+                                <h6 class="fw-bold">{{ request.title }}</h6>
+                                <p class="text-muted mb-2">
+                                    <i class="fas fa-tag me-1"></i>{{ request.skill_category }}
+                                </p>
+                                <p class="small text-muted mb-2">{{ request.description[:100] }}...</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        <i class="fas fa-user me-1"></i>
+                                        {{ request.user.first_name }} {{ request.user.last_name }}
+                                    </small>
+                                    <form method="POST" action="/offer_help/{{ request.id }}">
+                                        <button type="submit" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-handshake me-1"></i>Offer Help
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-search fa-2x text-muted mb-3"></i>
+                            <p class="text-muted">No learning requests available at the moment.</p>
+                            <p class="text-muted small">Check back later to help fellow learners!</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teaching Statistics -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-0 shadow">
+                <div class="card-header bg-success text-white py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>My Teaching Impact
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-light border-0">
+                                <div class="card-body">
+                                    <h3 class="text-success fw-bold">{{ sessions_taught }}</h3>
+                                    <p class="text-muted mb-0">Sessions Taught</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-light border-0">
+                                <div class="card-body">
+                                    <h3 class="text-primary fw-bold">{{ active_students }}</h3>
+                                    <p class="text-muted mb-0">Active Students</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-light border-0">
+                                <div class="card-body">
+                                    <h3 class="text-info fw-bold">{{ skills_offered }}</h3>
+                                    <p class="text-muted mb-0">Skills Offered</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-light border-0">
+                                <div class="card-body">
+                                    <h3 class="text-warning fw-bold">{{ rating }}/5.0</h3>
+                                    <p class="text-muted mb-0">Average Rating</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

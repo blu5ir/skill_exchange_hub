@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+        <div class="card shadow border-0">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <div class="user-avatar mx-auto mb-3" style="background: linear-gradient(45deg, #28a745, #20c997);">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h2 class="fw-bold">Create Skill Offer</h2>
+                    <p class="text-muted">Share your expertise and help others learn</p>
+                </div>
+                
+                <form method="POST">
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Skill Title *</label>
+                        <input type="text" class="form-control form-control-lg" name="title" 
+                               placeholder="e.g., Advanced Python Programming, Beginner Guitar, Web Design Fundamentals" 
+                               required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Skill Category *</label>
+                        <select class="form-select form-select-lg" name="skill_category" required>
+                            <option value="">Choose a category</option>
+                            <option value="Programming">Programming & Development</option>
+                            <option value="Design">Design & Creative Arts</option>
+                            <option value="Languages">Language Learning</option>
+                            <option value="Music">Music & Instruments</option>
+                            <option value="Sports">Sports & Fitness</option>
+                            <option value="Academics">Academic Tutoring</option>
+                            <option value="Business">Business Skills</option>
+                            <option value="Life Skills">Life Skills</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Description *</label>
+                        <textarea class="form-control" name="description" rows="5" 
+                                  placeholder="Describe what you'll teach, your teaching approach, and what learners can expect to achieve..." required></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Your Expertise Level *</label>
+                                <select class="form-select" name="expertise_level" required>
+                                    <option value="">Select level</option>
+                                    <option value="beginner">Beginner</option>
+                                    <option value="intermediate">Intermediate</option>
+                                    <option value="advanced">Advanced</option>
+                                    <option value="expert">Expert</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Session Duration</label>
+                                <select class="form-select" name="session_duration">
+                                    <option value="">Preferred duration</option>
+                                    <option value="30">30 minutes</option>
+                                    <option value="60">1 hour</option>
+                                    <option value="90">1.5 hours</option>
+                                    <option value="120">2 hours</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Availability *</label>
+                        <div class="form-text mb-2">When are you available for teaching? (Select all that apply)</div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="availability" value="weekday_mornings" id="mornings">
+                                    <label class="form-check-label" for="mornings">Weekday Mornings</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="availability" value="weekday_afternoons" id="afternoons">
+                                    <label class="form-check-label" for="afternoons">Weekday Afternoons</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="availability" value="weekday_evenings" id="evenings">
+                                    <label class="form-check-label" for="evenings">Weekday Evenings</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="availability" value="weekend_mornings" id="weekend_mornings">
+                                    <label class="form-check-label" for="weekend_mornings">Weekend Mornings</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="availability" value="weekend_afternoons" id="weekend_afternoons">
+                                    <label class="form-check-label" for="weekend_afternoons">Weekend Afternoons</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="availability" value="weekend_evenings" id="weekend_evenings">
+                                    <label class="form-check-label" for="weekend_evenings">Weekend Evenings</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Teaching Method</label>
+                        <div class="form-text mb-2">How do you prefer to teach? (Select all that apply)</div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="teaching_methods" value="one_on_one" id="one_on_one">
+                                    <label class="form-check-label" for="one_on_one">One-on-One Sessions</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="teaching_methods" value="group" id="group">
+                                    <label class="form-check-label" for="group">Group Sessions</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="teaching_methods" value="online" id="online">
+                                    <label class="form-check-label" for="online">Online/Virtual</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="teaching_methods" value="in_person" id="in_person">
+                                    <label class="form-check-label" for="in_person">In-Person</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-success border-0">
+                        <div class="d-flex">
+                            <i class="fas fa-star me-3 fs-4 text-warning"></i>
+                            <div>
+                                <strong>Great!</strong> By creating a skill offer, you're helping build a stronger learning community. 
+                                Be specific about what you can teach to attract the right learners.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg py-3">
+                            <i class="fas fa-rocket me-2"></i>Publish My Skill Offer
+                        </button>
+                        <a href="/dashboard" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

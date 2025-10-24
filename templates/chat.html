@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+        <div class="card shadow border-0">
+            <div class="card-header bg-primary text-white py-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-1">
+                            <i class="fas fa-comments me-2"></i>Chat: {{ connection.skill_request.title }}
+                        </h4>
+                        <small class="mb-0">
+                            <i class="fas fa-user me-1"></i>Chatting with {{ other_user.first_name }} {{ other_user.last_name }}
+                        </small>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge bg-light text-dark status-badge">
+                            {{ connection.status | title }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-body p-0">
+                <!-- Connection Status Alert -->
+                {% if connection.status != 'accepted' %}
+                <div class="alert alert-warning m-3 mb-0 border-0">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-clock me-3 fs-4"></i>
+                        <div>
+                            <strong>Pending Acceptance:</strong> 
+                            Wait for {{ other_user.first_name }} to accept your connection request before you can start chatting.
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Messages Container -->
+                <div id="messages-container" 
+                     style="height: 500px; overflow-y: auto; padding: 20px; background: #f8f9fa;">
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="message mb-3 {% if message.sender_id == current_user.id %}text-end{% endif %}">
+                            <div class="d-flex {% if message.sender_id == current_user.id %}justify-content-end{% endif %}">
+                                <div class="message-bubble {% if message.sender_id == current_user.id %}bg-primary text-white{% else %}bg-white border{% endif %}" 
+                                     style="max-width: 70%;">
+                                    <div class="message-text mb-1">{{ message.message_text }}</div>
+                                    <div class="message-time small {% if message.sender_id == current_user.id %}text-white-50{% else %}text-muted{% endif %}" 
+                                         style="font-size: 0.7rem;">
+                                        <i class="fas fa-clock me-1"></i>
+                                        {{ message.created_at | string | truncate(16, true, '') }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center text-muted mt-5">
+                            <i class="fas fa-comments fa-3x mb-3"></i>
+                            <p>No messages yet. Start the conversation!</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Send Message Form -->
+                {% if connection.status == 'accepted' %}
+                <div class="p-3 border-top">
+                    <form method="POST" action="/send_message/{{ connection.id }}" class="d-flex gap-2">
+                        <input type="text" class="form-control" name="message_text" 
+                               placeholder="Type your message here..." required
+                               style="border-radius: 25px;">
+                        <button type="submit" class="btn btn-primary" style="border-radius: 25px;">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+                {% else %}
+                <div class="alert alert-info m-3 border-0">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-info-circle me-3 fs-4"></i>
+                        <div>
+                            <small>You can only send messages after the connection is accepted by both parties.</small>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="card-footer bg-light">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            <strong>Connection Status:</strong> 
+                            <span class="badge 
+                                {% if connection.status == 'pending' %}bg-warning
+                                {% elif connection.status == 'accepted' %}bg-success
+                                {% elif connection.status == 'completed' %}bg-info
+                                {% else %}bg-secondary{% endif %}">
+                                {{ connection.status | title }}
+                            </span>
+                        </small>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <a href="/dashboard" class="btn btn-outline-secondary btn-sm me-2">
+                            <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+                        </a>
+                        
+                        {% if connection.status == 'accepted' %}
+                        <form method="POST" action="/manage_connection/{{ connection.id }}" class="d-inline">
+                            <input type="hidden" name="action" value="complete">
+                            <button type="submit" class="btn btn-success btn-sm">
+                                <i class="fas fa-flag me-1"></i>Mark as Complete
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Auto-scroll to bottom of messages and refresh -->
+<script>
+    // Pass the server-side status to a client-side JavaScript variable
+    // The | js filter escapes the string to make it safe for JavaScript
+    const connectionStatus = '{{ connection.status | js }}';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const messagesContainer = document.getElementById('messages-container');
+        if (messagesContainer) {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        // Auto-refresh messages every 5 seconds if connection is accepted
+        // This is now a standard JavaScript 'if', so the linter will not complain.
+        if (connectionStatus === 'accepted') {
+            setInterval(function() {
+                location.reload();
+            }, 5000);
+        }
+    });
+</script>
+{% endblock %}
